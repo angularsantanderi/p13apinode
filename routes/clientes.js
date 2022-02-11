@@ -4,9 +4,9 @@ const Cliente = require('../models/cliente');
 
 app.get('/', (req, res) => {
 
-    Cliente.find({}, (err, clientes) => {
+    Cliente.find({},  (err, clientes) => {
         if(err) {
-            res.status(500).json({
+            return res.status(500).json({
                 message: 'Dabase error'
             })
         }
@@ -21,7 +21,7 @@ app.get('/search/:term', (req, res) => {
     const metaTerm = "^" + req.params.term.replace(/á/ig, 'a').replace(/é/ig, 'e').replace(/í/ig, 'i').replace(/ó/ig, 'o').replace(/ú/ig, 'u');
     Cliente.find({nombre: {$regex: metaTerm, $options: 'i'}}, (err, clientes) => {
         if(err) {
-            res.status(500).json({
+            return res.status(500).json({
                 message: 'Dabase error'
             })
         }
@@ -34,13 +34,13 @@ app.get('/search/:term', (req, res) => {
 
 app.get('/:_id', (req, res) => {
     if(!req.params._id) {
-        res.status(400).json({
+        return res.status(400).json({
             message: '_id param mandatory'
         })
     }
     Cliente.findOne({_id: req.params._id}, (err, cliente) => {
         if(err) {
-            res.status(500).json({
+            return res.status(500).json({
                 message: 'Dabase error'
             })
         }
@@ -54,7 +54,7 @@ app.get('/:_id', (req, res) => {
 
 app.post('/', (req, res) => {
     if(!req.body.nombre) {
-        res.status(400).json({
+        return res.status(400).json({
             message: 'nombre mandatory'
         })
     }
@@ -66,7 +66,7 @@ app.post('/', (req, res) => {
     })
     cliente.save({}, (err, cliente) => {
         if(err) {
-            res.status(500).json({
+            return res.status(500).json({
                 message: 'Dabase error'
             })
         }
@@ -79,13 +79,13 @@ app.post('/', (req, res) => {
 
 app.put('/:_id', (req, res) => {
     if(!req.params._id) {
-        res.status(400).json({
+        return res.status(400).json({
             message: '_id param mandatory'
         })
     }
     Cliente.findOneAndUpdate({_id: req.params._id}, req.body, {new: true}, (err, cliente) => {
         if(err) {
-            res.status(500).json({
+            return res.status(500).json({
                 message: 'Dabase error'
             })
         }
@@ -98,13 +98,13 @@ app.put('/:_id', (req, res) => {
 
 app.delete('/:_id', (req, res) => {
     if(!req.params._id) {
-        res.status(400).json({
+        return res.status(400).json({
             message: '_id param mandatory'
         })
     }
     Cliente.deleteOne({_id: req.params._id}, (err, infoDeleted) => {
         if(err) {
-            res.status(500).json({
+            return res.status(500).json({
                 message: 'Dabase error'
             })
         }
